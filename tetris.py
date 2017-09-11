@@ -1,11 +1,11 @@
-# Tetromino (a Tetris clone)
-# By Al Sweigart al@inventwithpython.com
+# NoActualNameYetris
+# Forked from Tetromino
 # http://inventwithpython.com/pygame
-# Released under a "Simplified BSD" license
 
 import random, time, pygame, sys
 from pygame.locals import *
 import quiz
+from shapes import PIECES
 
 FPS = 25
 WINDOWWIDTH = 800
@@ -48,161 +48,6 @@ TEMPLATEHEIGHT = 5
 GAMENAME = 'T' + random.choice(['e', 'ay', 'o', 'e', 'a', 'o', 'on']) + 't' + \
 	random.choice(['rix', 'ris', 'rik', 'riz', 'ress', 'rez', 'rib', 'ronk'])
 
-S_SHAPE_TEMPLATE = [['.....',
-					 '.....',
-					 '..OO.',
-					 '.OO..',
-					 '.....'],
-					['.....',
-					 '..O..',
-					 '..OO.',
-					 '...O.',
-					 '.....']]
-
-Z_SHAPE_TEMPLATE = [['.....',
-					 '.....',
-					 '.OO..',
-					 '..OO.',
-					 '.....'],
-					['.....',
-					 '..O..',
-					 '.OO..',
-					 '.O...',
-					 '.....']]
-
-I_SHAPE_TEMPLATE = [['..O..',
-					 '..O..',
-					 '..O..',
-					 '..O..',
-					 '.....'],
-					['.....',
-					 '.....',
-					 'OOOO.',
-					 '.....',
-					 '.....']]
-
-O_SHAPE_TEMPLATE = [['.....',
-					 '.....',
-					 '.OO..',
-					 '.OO..',
-					 '.....']]
-
-J_SHAPE_TEMPLATE = [['.....',
-					 '.O...',
-					 '.OOO.',
-					 '.....',
-					 '.....'],
-					['.....',
-					 '..OO.',
-					 '..O..',
-					 '..O..',
-					 '.....'],
-					['.....',
-					 '.....',
-					 '.OOO.',
-					 '...O.',
-					 '.....'],
-					['.....',
-					 '..O..',
-					 '..O..',
-					 '.OO..',
-					 '.....']]
-
-L_SHAPE_TEMPLATE = [['.....',
-					 '...O.',
-					 '.OOO.',
-					 '.....',
-					 '.....'],
-					['.....',
-					 '..O..',
-					 '..O..',
-					 '..OO.',
-					 '.....'],
-					['.....',
-					 '.....',
-					 '.OOO.',
-					 '.O...',
-					 '.....'],
-					['.....',
-					 '.OO..',
-					 '..O..',
-					 '..O..',
-					 '.....']]
-
-T_SHAPE_TEMPLATE = [['.....',
-					 '..O..',
-					 '.OOO.',
-					 '.....',
-					 '.....'],
-					['.....',
-					 '..O..',
-					 '..OO.',
-					 '..O..',
-					 '.....'],
-					['.....',
-					 '.....',
-					 '.OOO.',
-					 '..O..',
-					 '.....'],
-					['.....',
-					 '..O..',
-					 '.OO..',
-					 '..O..',
-					 '.....']]
-
-Q_SHAPE_TEMPLATE = [['.....',
-					 '..O..',
-					 '.OOO.',
-					 '..O..',
-					 '.....'],
-					['.....',
-					 '..O..',
-					 '.O.O.',
-					 '..O..',
-					 '.....'],
-					['.....',
-					 '.....',
-					 '.O.O.',
-					 '..O..',
-					 '.....'],
-					['.....',
-					 '..O..',
-					 '.O...',
-					 '.....',
-					 '.....']]
-
-GLIDER_SHAPE_TEMPLATE = [['.....',
-					 '...O.',
-					 '.O.O.',
-					 '..OO.',
-					 '.....'],
-					['.....',
-					 '.O...',
-					 '..OO.',
-					 '.OO..',
-					 '.....'],
-					['.....',
-					 '..O..',
-					 '...O.',
-					 '.OOO.',
-					 '.....'],
-					 ['.....',
-					 '.O.O.',
-					 '..OO.',
-					 '..O..',
-					 '.....'],
-					 ]
-
-PIECES = {'S': S_SHAPE_TEMPLATE,
-		  'Z': Z_SHAPE_TEMPLATE,
-		  'J': J_SHAPE_TEMPLATE,
-		  'L': L_SHAPE_TEMPLATE,
-		  'I': I_SHAPE_TEMPLATE,
-		  'O': O_SHAPE_TEMPLATE,
-		  'T': T_SHAPE_TEMPLATE,
-		  '?': Q_SHAPE_TEMPLATE,
-		  'glider': GLIDER_SHAPE_TEMPLATE}
-
 
 def main():
 	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, alertSound, successSounds, failSounds
@@ -215,12 +60,13 @@ def main():
 	alertSound = pygame.mixer.Sound('found.wav')
 	
 	failSounds = []
+	
 	for filename in ['fail.wav', 'BUZZER.wav', 'buzzer3_x.wav']:
-		failSounds.append(pygame.mixer.Sound(filename))
+		failSounds.append(pygame.mixer.Sound('./sounds/' + filename))
 	
 	successSounds = []
 	for filename in ['clap.wav', 'cashregister.wav', 'congratulations-you-won.wav']:
-		successSounds.append(pygame.mixer.Sound(filename))
+		successSounds.append(pygame.mixer.Sound('./sounds/' + filename))
 	
 	
 	pygame.display.set_caption(GAMENAME)
@@ -228,9 +74,9 @@ def main():
 	showTextScreen(GAMENAME)
 	while True: # game loop
 		if random.randint(0, 1) == 0:
-			pygame.mixer.music.load('tetrisb.mid')
+			pygame.mixer.music.load('./music/tetrisb.mid')
 		else:
-			pygame.mixer.music.load('tetrisc.mid')
+			pygame.mixer.music.load('./music/tetrisc.mid')
 		pygame.mixer.music.play(-1, 0.0)
 		runGame()
 		pygame.mixer.music.stop()
