@@ -86,11 +86,12 @@ def main():
 def runGame():
 	# setup variables for the start of the game
 	global board, score, level, fallFreq, movingDown, movingLeft, movingRight
-	global fallingPiece, nextPiece
+	global fallingPiece, nextPiece, currTime
+	currTime = 0.0
 	board = getBlankBoard()
-	lastMoveDownTime = time.time()
-	lastMoveSidewaysTime = time.time()
-	lastFallTime = time.time()
+	lastMoveDownTime = currTime
+	lastMoveSidewaysTime = currTime
+	lastFallTime = currTime
 	movingDown = False # note: there is no movingUp variable
 	movingLeft = False
 	movingRight = False
@@ -105,7 +106,7 @@ def runGame():
 			# No falling piece in play, so start a new piece at the top
 			fallingPiece = nextPiece
 			nextPiece = getNewPiece()
-			lastFallTime = time.time() # reset lastFallTime
+			lastFallTime = currTime # reset lastFallTime
 
 			if not isValidPosition(board, fallingPiece):
 				return # can't fit a new piece on the board, so game over
@@ -119,9 +120,9 @@ def runGame():
 					pygame.mixer.music.stop()
 					showTextScreen('Paused') # pause until a key press
 					pygame.mixer.music.play(-1, 0.0)
-					lastFallTime = time.time()
-					lastMoveDownTime = time.time()
-					lastMoveSidewaysTime = time.time()
+					lastFallTime = currTime
+					lastMoveDownTime = currTime
+					lastMoveSidewaysTime = currTime
 				elif (event.key == K_LEFT or event.key == K_a):
 					movingLeft = False
 				elif (event.key == K_RIGHT or event.key == K_d):
@@ -135,13 +136,13 @@ def runGame():
 					fallingPiece['x'] -= 1
 					movingLeft = True
 					movingRight = False
-					lastMoveSidewaysTime = time.time()
+					lastMoveSidewaysTime = currTime
 
 				elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
 					fallingPiece['x'] += 1
 					movingRight = True
 					movingLeft = False
-					lastMoveSidewaysTime = time.time()
+					lastMoveSidewaysTime = currTime
 
 				# rotating the piece (if there is room to rotate)
 				elif (event.key == K_UP or event.key == K_w):
@@ -158,7 +159,7 @@ def runGame():
 					movingDown = True
 					if isValidPosition(board, fallingPiece, adjY=1):
 						fallingPiece['y'] += 1
-					lastMoveDownTime = time.time()
+					lastMoveDownTime = currTime
 
 				# move the current piece all the way down
 				elif event.key == K_SPACE:
@@ -171,25 +172,24 @@ def runGame():
 					fallingPiece['y'] += i - 1
 
 		# handle moving the piece because of user input
-		if (movingLeft or movingRight) and time.time() - lastMoveSidewaysTime > MOVESIDEWAYSFREQ:
+		if (movingLeft or movingRight) and currTime - lastMoveSidewaysTime > MOVESIDEWAYSFREQ:
 			if movingLeft and isValidPosition(board, fallingPiece, adjX=-1):
 				fallingPiece['x'] -= 1
 			elif movingRight and isValidPosition(board, fallingPiece, adjX=1):
 				fallingPiece['x'] += 1
-			lastMoveSidewaysTime = time.time()
+			lastMoveSidewaysTime = currTime
 
-		if movingDown and time.time() - lastMoveDownTime > MOVEDOWNFREQ and isValidPosition(board, fallingPiece, adjY=1):
+		if movingDown and currTime - lastMoveDownTime > MOVEDOWNFREQ and isValidPosition(board, fallingPiece, adjY=1):
 			fallingPiece['y'] += 1
-			lastMoveDownTime = time.time()
+			lastMoveDownTime = currTime
 
 		# let the piece fall if it is time to fall
-		if time.time() - lastFallTime > fallFreq:
-			print(str(time.time() - lastFallTime) + ' > ' + str(fallFreq))
+		if currTime - lastFallTime > fallFreq:
 			# see if the piece has landed
 			if not isValidPosition(board, fallingPiece, adjY=1):
 				# falling piece has landed, set it on the board
 				onQuiz()
-				lastFallTime = time.time()
+				lastFallTime = currTime
 				addToBoard(board, fallingPiece)
 				score += removeCompleteLines(board)
 				level, fallFreq = calculateLevelAndFallFreq(score)
@@ -197,7 +197,7 @@ def runGame():
 			else:
 				# piece did not land, just move the piece down
 				fallingPiece['y'] += 1
-				lastFallTime = time.time()
+				lastFallTime = currTime
 
 		# drawing everything on the screen
 		DISPLAYSURF.fill(BGCOLOR)
@@ -208,7 +208,8 @@ def runGame():
 			drawPiece(fallingPiece)
 
 		pygame.display.update()
-		FPSCLOCK.tick(FPS)
+		dt = FPSCLOCK.tick(FPS) / 1000.0
+		currTime += dt;
 
 
 def makeTextObjs(text, font, color):
