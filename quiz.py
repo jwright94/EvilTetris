@@ -20,7 +20,7 @@ class Question:
 		return out
 
 def downloadQuestions():
-	url = "https://opentdb.com/api.php?amount=50&difficulty=hard"
+	url = "https://opentdb.com/api.php?amount=20&category=18&difficulty=hard"
 	response = urllib.urlopen(url)
 	data = json.loads(response.read())
 	print(data)

@@ -539,7 +539,8 @@ def onQuiz():
 			random.choice(failSounds).play()
 			flipboard()
 			return False;
-		
+
+
 def blit_text(surface, text, pos, font, color=BLACK):
     words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
     space = font.size(' ')[0]  # The width of a space.
@@ -565,7 +566,7 @@ def flipboard():
 				#randomly delete blocks
 				if random.randint(1, 100) > 80:
 					board[x][y] = BLANK
-			elif x > 4:
+			elif y > 4:
 				#randomly add blocks
 				if random.randint(1, 20000) < 75:
 					board[x][y] = random.randint(0, len(COLORS)-1)
