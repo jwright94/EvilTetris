@@ -1,0 +1,7 @@
+# The Rules
+
+Normal Tetris But..
+
+Every time you try and a place a piece theres a a quiz
+If you answer correctly the piece is placed no problem
+If you answer incorrectly the game has the right to destroy the board
