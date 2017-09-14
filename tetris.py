@@ -158,6 +158,7 @@ def runGame():
 				elif (event.key == K_DOWN or event.key == K_s):
 					movingDown = True
 					if isValidPosition(board, fallingPiece, adjY=1):
+						print('A')
 						fallingPiece['y'] += 1
 					lastMoveDownTime = currTime
 
@@ -180,6 +181,7 @@ def runGame():
 			lastMoveSidewaysTime = currTime
 
 		if movingDown and currTime - lastMoveDownTime > MOVEDOWNFREQ and isValidPosition(board, fallingPiece, adjY=1):
+			print('B')
 			fallingPiece['y'] += 1
 			lastMoveDownTime = currTime
 
@@ -189,6 +191,7 @@ def runGame():
 			if not isValidPosition(board, fallingPiece, adjY=1):
 				# falling piece has landed, set it on the board
 				onQuiz()
+				movingLeft = movingRight = movingDown = False
 				lastFallTime = currTime
 				addToBoard(board, fallingPiece)
 				score += removeCompleteLines(board)
@@ -196,6 +199,7 @@ def runGame():
 				fallingPiece = None
 			else:
 				# piece did not land, just move the piece down
+				print('C')
 				fallingPiece['y'] += 1
 				lastFallTime = currTime
 
@@ -209,7 +213,7 @@ def runGame():
 
 		pygame.display.update()
 		dt = FPSCLOCK.tick(FPS) / 1000.0
-		currTime += dt;
+		currTime += dt
 
 
 def makeTextObjs(text, font, color):
