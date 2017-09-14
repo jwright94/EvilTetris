@@ -335,16 +335,11 @@ def removeCompleteLines(board):
 			for pullDownY in range(y, 0, -1):
 				for x in range(BOARDWIDTH):
 					board[x][pullDownY] = board[x][pullDownY-1]
-			success = onQuiz()
+			
 			# Set very top line to blank.
-			if(success):
-				for x in range(BOARDWIDTH):
-					board[x][0] = BLANK
-				numLinesRemoved += 1
-			else:
-				for x in range(BOARDWIDTH):
-					if random.randint(1, 100) > 50:
-						board[x][0] = BLANK
+			for x in range(BOARDWIDTH):
+				board[x][0] = BLANK
+			numLinesRemoved += 1
 			# Note on the next iteration of the loop, y is the same.
 			# This is so that if the line that was pulled down is also
 			# complete, it will be removed.
