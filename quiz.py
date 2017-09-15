@@ -62,6 +62,7 @@ def getQuestion():
 		loadQuestions()
 	q = random.choice(questions)
 	questions.remove(q)
+	print(q)
 	return q
 
 loadQuestions()
